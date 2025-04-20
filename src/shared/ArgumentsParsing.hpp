@@ -1,14 +1,13 @@
 #pragma once
 
-#include <optional>
-#include <stdexcept>
-#include <cstring>
 #include <array>
 #include <cstdint>
+#include <cstring>
+#include <optional>
+#include <stdexcept>
 
 namespace PPNet
 {
-
 static int StoiWithErrorPrefix(const char *str, const char *errorMessagePrefix)
 {
     try
@@ -23,4 +22,4 @@ static int StoiWithErrorPrefix(const char *str, const char *errorMessagePrefix)
         throw std::invalid_argument{ errorMsg };
     }
 }
-}
+} // namespace PPNet

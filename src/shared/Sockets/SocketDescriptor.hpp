@@ -3,9 +3,9 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <string>
-#include <stdexcept>
 #include <cstring>
+#include <stdexcept>
+#include <string>
 
 #include "ThrowHelpers.hpp"
 
@@ -18,8 +18,8 @@ class SocketDescriptor
     int descriptor_;
 
 public:
-    SocketDescriptor(int descriptor) : descriptor_(descriptor) { };
-    
+    SocketDescriptor(int descriptor) : descriptor_(descriptor){};
+
     static SocketDescriptor Open(int type)
     {
         int descriptor = socket(AF_INET, type, 0);
@@ -32,18 +32,18 @@ public:
     int Get() const { return descriptor_; }
 
     SocketDescriptor(const SocketDescriptor &rhs) = delete;
-    SocketDescriptor& operator =(const SocketDescriptor &rhs) = delete;
+    SocketDescriptor &operator=(const SocketDescriptor &rhs) = delete;
 
     SocketDescriptor(SocketDescriptor &&rhs)
     {
-        if(this == &rhs)
+        if (this == &rhs)
             return;
 
         descriptor_ = rhs.descriptor_;
         rhs.descriptor_ = InvalidSocket;
     }
 
-    SocketDescriptor& operator =(SocketDescriptor &&rhs)
+    SocketDescriptor &operator=(SocketDescriptor &&rhs)
     {
         std::swap(descriptor_, rhs.descriptor_);
         return *this;
@@ -60,9 +60,9 @@ public:
 
     ~SocketDescriptor()
     {
-        if(descriptor_ == InvalidSocket)
+        if (descriptor_ == InvalidSocket)
             return;
-       Close();
+        Close();
     }
 };
-}
+} // namespace PPNet

@@ -1,12 +1,10 @@
 #pragma once
 
-#include "TransportSocket.hpp"
 #include "IPv4Address.hpp"
+#include "TransportSocket.hpp"
 
 namespace PPNet
 {
-
-
 class UdpSocket : public TransportSocket
 {
 public:
@@ -22,7 +20,7 @@ public:
     {
         sockaddr sockaddr = to.AsSockaddr();
         int bytesSent = sendto(Descriptor.Get(), data, dataLength, 0, &sockaddr, IPv4Address::Size);
-        if(bytesSent < 0)
+        if (bytesSent < 0)
             ThrowWithErrnoStr<std::runtime_error>("UDP socket failed to send");
         return bytesSent;
     }
@@ -32,9 +30,9 @@ public:
         socklen_t length = IPv4Address::Size;
         sockaddr sockaddr;
         int read = recvfrom(Descriptor.Get(), buffer, bufferLength, 0, &sockaddr, &length);
-        if(read < 0)
+        if (read < 0)
             ThrowWithErrnoStr<std::runtime_error>("UDP socket failed to read");
-        
+
         return ReceiveResult{
             .BytesReceived = read,
             .From = IPv4Address::FromSockaddr(sockaddr),

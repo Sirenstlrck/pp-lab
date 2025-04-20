@@ -1,7 +1,7 @@
 #pragma once
 
-#include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
 
 #include <stdexcept>
 
@@ -31,7 +31,7 @@ public:
 
     static IPv4Address FromSockaddr(sockaddr sockaddr)
     {
-        sockaddr_in *sockaddrIn = reinterpret_cast<sockaddr_in*>(&sockaddr);
+        sockaddr_in *sockaddrIn = reinterpret_cast<sockaddr_in *>(&sockaddr);
         return IPv4Address(*sockaddrIn);
     }
 
@@ -48,10 +48,9 @@ private:
         addr_ = addr;
     }
 
-    IPv4Address(sockaddr_in sockaddr) : addr_(sockaddr) { }
+    IPv4Address(sockaddr_in sockaddr) : addr_(sockaddr) {}
 
 public:
-
     sockaddr_in AsSockaddrIn() const { return addr_; }
 
     sockaddr AsSockaddr() const { return *reinterpret_cast<const sockaddr *>(&addr_); }

@@ -40,12 +40,14 @@ try
     {
         for (UdpSocketSPtr &readSocket : readSocket)
         {
-            UdpSocket::ReceiveResult receiveResult = readSocket->ReceiveFrom(receiveBuffer.data(), receiveBuffer.size());
+            UdpSocket::ReceiveResult receiveResult =
+                readSocket->ReceiveFrom(receiveBuffer.data(), receiveBuffer.size());
 
             for (int i = 0; i < receiveResult.BytesReceived; ++i)
             {
                 Message message = *reinterpret_cast<Message *>(receiveBuffer.data() + i);
-                std::cout << '#' <<  messageId << "\t Received " << static_cast<int>(message) << "\n";
+                std::cout << '#' << messageId << "\t Received " << static_cast<int>(message)
+                          << "\n";
             }
             ++messageId;
         }

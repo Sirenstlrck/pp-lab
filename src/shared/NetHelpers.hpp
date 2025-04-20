@@ -2,23 +2,21 @@
 
 #include <cstring>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <memory>
 
-#include <unistd.h>
 #include <arpa/inet.h>
-#include <sys/socket.h>
 #include <sys/select.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
-#include "Sockets/Aliases.hpp"
 #include "ArgumentsParsing.hpp"
+#include "Sockets/Aliases.hpp"
 
 namespace PPNet
 {
-
-
 template <typename Socket>
 static void FillSet(fd_set &set, const std::vector<std::shared_ptr<Socket>> &sockets)
 {
@@ -36,13 +34,13 @@ static void FillVectorFromSet(
     std::vector<std::shared_ptr<Socket>> &destination)
 {
     destination.clear();
-    for(const std::shared_ptr<Socket> &s : full)
+    for (const std::shared_ptr<Socket> &s : full)
     {
         destination.push_back(s);
     }
 }
 
-template<typename Socket>
+template <typename Socket>
 static int Select(
     const std::vector<std::shared_ptr<Socket>> &sockets,
     std::vector<std::shared_ptr<Socket>> &outReadSockets)
@@ -56,4 +54,4 @@ static int Select(
 
     return selectRes;
 }
-}
+} // namespace PPNet

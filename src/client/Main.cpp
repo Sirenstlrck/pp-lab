@@ -15,11 +15,11 @@ try
     ClientArgs args = ClientArgs::FromShellArgs(argc, argv);
     UdpSocket socket;
 
-    while(!gExitRequested)
+    while (!gExitRequested)
     {
         uint8_t message = args.Number();
         int sended = socket.SendTo(&message, sizeof(message), args.ServerAddress());
-        std::cout << "Sended "<< sended << " bytes\n";
+        std::cout << "Sended " << sended << " bytes\n";
         sleep(args.Number());
     }
 }
