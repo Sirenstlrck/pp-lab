@@ -2,6 +2,8 @@
 
 #include <netinet/tcp.h>
 
+
+#include <array>
 #include <optional>
 
 #include "TransportSocket.hpp"
@@ -49,6 +51,24 @@ public:
         }
 
         return TcpSocket(newSocket);
+    }
+
+    int Send(const void* inData, int inLen) const
+    {
+        int bytesSentCount = send(Descriptor.Get(), static_cast<const char*>(inData), inLen, 0);
+        if(bytesSentCount < 0)
+            ThrowWithErrnoStr<std::runtime_error>("Socket failed to send data");
+        
+        return bytesSentCount;
+    }
+
+    int Receive(void* inData, int inLen) const
+    {
+        int bytesReceivedCount = recv(Descriptor.Get(), static_cast<char*>(inData), inLen, 0);
+        if(bytesReceivedCount < 0)
+            ThrowWithErrnoStr<std::runtime_error>("Socket failed to receive data");
+        
+        return bytesReceivedCount;
     }
 };
 }

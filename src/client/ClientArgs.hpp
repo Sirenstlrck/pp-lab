@@ -8,41 +8,38 @@
 
 #include "ArgumentsParsing.hpp"
 #include "ThrowHelpers.hpp"
+#include "Sockets/IPv4Address.hpp"
 
 namespace PPNet
 {
 class ClientArgs
 {
-    uint32_t address_;
-    uint16_t port_;
+    IPv4Address serverAddress_;
     
     int number_;
     
     public:
-    ClientArgs(int argc, char **argv)
+    static ClientArgs FromShellArgs(int argc, char **argv)
     {
         if(argc != 4)
         {
             throw std::invalid_argument("There should be 3 arguments: <address> <port> <number>");
         }
-        
-        in_addr addr{};
-        int ptonResult = inet_pton(AF_INET, argv[1], &addr);
-        if (ptonResult <= 0) 
-            throw std::runtime_error("Failed to parse address string");
 
-        address_ = addr.s_addr;
-        port_ = StoiWithErrorPrefix(argv[2], "Failed to parse port");
-        number_ = StoiWithErrorPrefix(argv[3], "Failed to parse number");
+        uint16_t port = StoiWithErrorPrefix(argv[2], "Failed to parse port");
+        IPv4Address serverAddress = IPv4Address::FromPresentation(argv[1], port);
+        int number = StoiWithErrorPrefix(argv[3], "Failed to parse number");
+
+        return ClientArgs(serverAddress, number);
+    }
+
+    ClientArgs(IPv4Address serverAddress, int number) : serverAddress_(serverAddress), number_(number)
+    {
         if(number_ < 0 || number_ > 10)
             throw std::runtime_error("The number should be in range [0..10]");
     }
-
-    uint32_t NetOrderAddress() const { return htonl(address_); }
-    uint16_t NetOrderPort() const { return htons(port_); }
     
-    uint32_t Address() const { return address_; }
-    uint16_t Port() const { return port_; }
+    IPv4Address ServerAddress() const { return serverAddress_; }
     int Number() const { return number_; }
 };
 }

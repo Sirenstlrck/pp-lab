@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "ClientArgs.hpp"
-#include "Sockets/TcpSocket.hpp"
+#include "Sockets/UdpSocket.hpp"
 
 using namespace PPNet;
 
@@ -12,21 +12,14 @@ void RequestExit(int) { gExitRequested = true; }
 int main(int argc, char **argv)
 try
 {
-    ClientArgs args(argc, argv);
-    TcpSocket socket;
-
-    sockaddr_in addr{};
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = args.Address();
-    addr.sin_port = args.NetOrderPort();
-    sockaddr *rawAddr = reinterpret_cast<sockaddr*>(&addr);
-    socket.SetNoDelay(true);
-    socket.Connect(*rawAddr);
+    ClientArgs args = ClientArgs::FromShellArgs(argc, argv);
+    UdpSocket socket;
 
     while(!gExitRequested)
     {
         uint8_t message = args.Number();
-        socket.Send(&message, sizeof(message));
+        int sended = socket.SendTo(&message, sizeof(message), args.ServerAddress());
+        std::cout << "Sended "<< sended << " bytes\n";
         sleep(args.Number());
     }
 }

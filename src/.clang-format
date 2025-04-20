@@ -3,9 +3,9 @@ Language: Cpp
 BasedOnStyle: LLVM
 AccessModifierOffset: -4
 AlignAfterOpenBracket: AlwaysBreak
-AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: true
-AlignOperands: true
+#AlignConsecutiveAssignments: true
+#AlignConsecutiveDeclarations: true
+#AlignOperands: true
 AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true

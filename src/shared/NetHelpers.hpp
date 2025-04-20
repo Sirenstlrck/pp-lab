@@ -17,28 +17,35 @@
 
 namespace PPNet
 {
-static void FillSet(fd_set &set, const std::vector<TcpSocketSPtr> &sockets)
+
+
+template <typename Socket>
+static void FillSet(fd_set &set, const std::vector<std::shared_ptr<Socket>> &sockets)
 {
     FD_ZERO(&set);
-    for (const TcpSocketSPtr &socket : sockets)
+    for (const std::shared_ptr<Socket> &socket : sockets)
     {
         FD_SET(socket->GetDescriptor(), &set);
     }
 }
 
+template <typename Socket>
 static void FillVectorFromSet(
     fd_set &set,
-    const std::vector<TcpSocketSPtr> &full,
-    std::vector<TcpSocketSPtr> &destination)
+    const std::vector<std::shared_ptr<Socket>> &full,
+    std::vector<std::shared_ptr<Socket>> &destination)
 {
     destination.clear();
-    for(const TcpSocketSPtr &s : full)
+    for(const std::shared_ptr<Socket> &s : full)
     {
         destination.push_back(s);
     }
 }
 
-static int Select(const std::vector<TcpSocketSPtr> &sockets, std::vector<TcpSocketSPtr> &outReadSockets)
+template<typename Socket>
+static int Select(
+    const std::vector<std::shared_ptr<Socket>> &sockets,
+    std::vector<std::shared_ptr<Socket>> &outReadSockets)
 {
     fd_set readSet;
     FillSet(readSet, sockets);
